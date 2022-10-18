@@ -1,6 +1,5 @@
 package kr.yh;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,8 +12,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class GameTest {
 
@@ -117,6 +118,34 @@ public class GameTest {
 
     private static InputStream generateUserInput(String input){
         return new ByteArrayInputStream(input.getBytes());
+    }
+    
+    @Test
+    public void testMatch() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
+        //given
+        int[] numbersOfClient = {1,2,3};
+        Game game = new Game(3);
+        Method method = game.getClass().getDeclaredMethod("match", int[].class);
+        method.setAccessible(true);
+        Field rightAnswers = game.getClass().getDeclaredField("rightAnswers");
+        rightAnswers.setAccessible(true);
+        Field rightAnswersSet = game.getClass().getDeclaredField("rightAnswerSet");
+        rightAnswersSet.setAccessible(true);
+
+
+
+        int[] arr = (int[]) rightAnswers.get(game);
+        arr[0] = 1;
+        arr[1] = 3;
+        arr[2] = 4;
+
+        Set<Integer> set = (Set<Integer>) rightAnswersSet.get(game);
+        set.addAll(List.of(1,3,4));
+
+        //when
+        Object score = method.invoke(game, numbersOfClient);
+        //then
+        assertThat(score.toString()).isEqualTo("1 1 1");
     }
 
 }
