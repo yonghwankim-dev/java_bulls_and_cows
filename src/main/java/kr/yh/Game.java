@@ -9,10 +9,21 @@ import java.util.Random;
 import java.util.Set;
 
 public class Game {
+    private static class Score{
+        private int strike;
+        private int ball;
+        private int out;
+
+        public String toString(){
+            return String.format("%d %d %d", strike, ball, out);
+        }
+    }
+
     private int numberOfBall;
     private int currentRound;
     private int[] rightAnswers;
     private Set<Integer> rightAnswerSet;
+
     public Game(int numberOfBall) {
         this.numberOfBall = numberOfBall;
         this.currentRound = 1;
@@ -70,6 +81,20 @@ public class Game {
             throw new RuntimeException(e);
         }
         return result;
+    }
+
+    private Score match(int[] numbersOfClient){
+        Score score = new Score();
+        for(int i = 0; i < numberOfBall; i++){
+            if(rightAnswers[i] == numbersOfClient[i]){
+                score.strike++;
+            }else if(rightAnswerSet.contains(numbersOfClient[i])) {
+                score.ball++;
+            }else{
+                score.out++;
+            }
+        }
+        return score;
     }
 
 }
