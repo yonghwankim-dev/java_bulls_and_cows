@@ -35,7 +35,7 @@ public class Game {
         initGame();
         while(currentRound <= 9){
             displayCurrentRound();
-            int[] numbersOfClient = inputNumbersFromClient();
+            Score result = match(inputNumbersFromClient());
             passRound();
         }
     }
@@ -95,6 +95,10 @@ public class Game {
             }
         }
         return score;
+    }
+
+    private void displayScore(Score score){
+        System.out.printf("%d스트라이크 %d볼 %d아웃\n", score.strike, score.ball, score.out);
     }
 
 }
