@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -146,6 +147,24 @@ public class GameTest {
         Object score = method.invoke(game, numbersOfClient);
         //then
         assertThat(score.toString()).isEqualTo("1 1 1");
+    }
+
+    @Test
+    public void displayScore() throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+        //given
+        Game game = new Game(3);
+
+        Class<?> scoreClass = game.getClass().getDeclaredClasses()[0];
+        Constructor<?> constructor = scoreClass.getDeclaredConstructors()[0];
+        constructor.setAccessible(true);
+        Object score = constructor.newInstance();
+
+        Method displayScore = game.getClass().getDeclaredMethod("displayScore", game.getClass().getDeclaredClasses()[0]);
+        displayScore.setAccessible(true);
+        //when
+        displayScore.invoke(game, score);
+        //then
+        assertThat(byteArrayOutputStream.toString()).isEqualTo("0스트라이크 0볼 0아웃\n");
     }
 
 }
