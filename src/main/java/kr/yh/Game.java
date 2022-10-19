@@ -23,26 +23,38 @@ public class Game {
     private int currentRound;
     private int[] rightAnswers;
     private Set<Integer> rightAnswerSet;
+    private static BufferedReader br;
 
     public Game(int numberOfBall) {
         this.numberOfBall = numberOfBall;
         this.currentRound = 1;
         this.rightAnswers = new int[numberOfBall];
         this.rightAnswerSet = new HashSet<>();
+        this.br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     public void start(){
         initGame();
-        while(currentRound <= 9){
+        while(isPlaying()){
             displayCurrentRound();
-            Score result = match(inputNumbersFromClient());
+            Score score = match(inputNumbersFromClient());
+            displayScore(score);
+            if(checkSuccess(score)){
+                displaySuccess();
+                return;
+            }
             passRound();
         }
+        displayFail();
     }
 
     private void initGame(){
         createRightAnswers();
         resetCurrentRound();
+    }
+
+    private boolean isPlaying(){
+        return currentRound <= 9;
     }
 
     private void createRightAnswers(){
@@ -75,11 +87,13 @@ public class Game {
 
     private int[] inputNumbersFromClient() {
         int[] result;
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(System.in))){
+
+        try {
             result = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         return result;
     }
 
@@ -99,6 +113,18 @@ public class Game {
 
     private void displayScore(Score score){
         System.out.printf("%d스트라이크 %d볼 %d아웃\n", score.strike, score.ball, score.out);
+    }
+
+    private boolean checkSuccess(Score score){
+        return score.strike == numberOfBall;
+    }
+
+    private void displaySuccess(){
+        System.out.println("플레이어 승!");
+    }
+
+    private void displayFail(){
+        System.out.println("플레이어 패!. 정답 : " + Arrays.toString(rightAnswers));
     }
 
 }

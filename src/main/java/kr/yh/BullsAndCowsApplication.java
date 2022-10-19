@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BullsAndCowsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BullsAndCowsApplication.class, args);
+        new Game(3).start();
     }
 
 }

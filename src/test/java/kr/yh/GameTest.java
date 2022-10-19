@@ -150,7 +150,7 @@ public class GameTest {
     }
 
     @Test
-    public void displayScore() throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    public void testDisplayScore() throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         //given
         Game game = new Game(3);
 
@@ -165,6 +165,23 @@ public class GameTest {
         displayScore.invoke(game, score);
         //then
         assertThat(byteArrayOutputStream.toString()).isEqualTo("0스트라이크 0볼 0아웃\n");
+    }
+
+    @Test
+    public void testCheckSuccess() throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+        //given
+        Game game = new Game(3);
+        Class<?> scoreClass = game.getClass().getDeclaredClasses()[0];
+        Constructor<?> constructor = scoreClass.getDeclaredConstructors()[0];
+        constructor.setAccessible(true);
+        Object score = constructor.newInstance();
+
+        Method checkSuccess = game.getClass().getDeclaredMethod("checkSuccess", game.getClass().getDeclaredClasses()[0]);
+        checkSuccess.setAccessible(true);
+        //when
+        boolean actual = (boolean) checkSuccess.invoke(game, score);
+        //then
+        assertThat(actual).isFalse();
     }
 
 }
