@@ -37,6 +37,7 @@ public class Game {
         initGame();
         while(isPlaying()){
             displayCurrentRound();
+            displayInputMessage();
             Score score = match(inputNumbersFromClient());
             displayScore(score);
             if(checkSuccess(score)){
@@ -112,7 +113,7 @@ public class Game {
     }
 
     private void displayScore(Score score){
-        System.out.printf("%d스트라이크 %d볼 %d아웃\n", score.strike, score.ball, score.out);
+        System.out.printf("%d스트라이크 %d볼 %d아웃\n\n", score.strike, score.ball, score.out);
     }
 
     private boolean checkSuccess(Score score){
@@ -125,6 +126,10 @@ public class Game {
 
     private void displayFail(){
         System.out.println("플레이어 패!. 정답 : " + Arrays.toString(rightAnswers));
+    }
+
+    private void displayInputMessage(){
+        System.out.print("입력 : ");
     }
 
 }
