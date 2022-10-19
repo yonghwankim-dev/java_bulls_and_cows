@@ -15,3 +15,11 @@
 5. 2라운드 결과는 (3스트라이크)입니다.
 6. 3스트라이크이므로 결과는 플레이어 승입니다.
 7. 게임을 종료합니다.
+### 빌드(build)
+```
+bulls_and_cows $ ./gradlew bootJar
+```
+### 실행(execution)
+```
+bulls_and_cows/build/libs $ java -jar .\bulls_and_cows-0.0.1-SNAPSHOT.jar
+```
